@@ -31,7 +31,6 @@
             >
                 다음
             </button>
-
         </div>
     </form>
 </template>

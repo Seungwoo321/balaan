@@ -49,7 +49,6 @@
             >
                 다음
             </button>
-
         </div>
     </form>
 </template>
@@ -183,13 +182,11 @@ export default {
                 oncomplete: (data) => {
                     let address = ''
                     let extraAddress = ''
-
                     if (data.userSelectedType === 'R') {
                         address = data.roadAddress
                     } else {
                         address = data.jibunAddress
                     }
-
                     if (data.userSelectedType === 'R') {
                         if (data.bname !== '' && /[동|로|가]$/g.test(data.bname)) {
                             extraAddress += data.bname
