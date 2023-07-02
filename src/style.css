@@ -1,0 +1,98 @@
+.d-flex {
+    display: flex;
+}
+
+.d-block {
+    display: block;
+}
+
+.w-100 {
+    width: 100%;
+}
+
+.justify-content-flex-end {
+    justify-content: flex-end;
+}
+
+.justify-content-space-between {
+    justify-content: space-between;
+}
+
+.flex-direction-column {
+    flex-direction: column;
+}
+
+.pt-25 {
+    padding-top: 0.25rem;
+}
+
+.pb-25 {
+    padding-bottom: 0.25rem;
+}
+
+.pl-25 {
+    padding-left: 0.25rem;
+}
+
+.pr-25 {
+    padding-right: 0.25rem;
+}
+
+.pt-50 {
+    padding-top: 0.50rem;
+}
+
+.pb-50 {
+    padding-bottom: 0.50rem;
+}
+
+.pl-50 {
+    padding-left: 0.5rem;
+}
+
+.pr-50 {
+    padding-right: 0.5rem;
+}
+
+.mt-25 {
+    margin-top: 0.25rem;
+}
+
+.mb-25 {
+    margin-bottom: 0.25rem;
+}
+
+.ml-25 {
+    margin-left: 0.25rem;
+}
+
+.mr-25 {
+    margin-right: 0.25rem;
+}
+
+.mt-50 {
+    margin-top: 0.5rem;
+}
+
+.mb-50 {
+    margin-bottom: 0.5rem;
+}
+
+.ml-50 {
+    margin-left: 0.50rem;
+}
+
+.mr-50 {
+    margin-right: 0.50rem;
+}
+
+
+/* custom */
+
+.wizard {
+    max-width: 350px;
+}
+
+.text-danger {
+    color: #f83737
+}
