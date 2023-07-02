@@ -2,6 +2,8 @@
 
 발란 프론트엔드 사전과제 프로젝트 입니다.
 
+[과제 배포 링크](https://seungwoo321.github.io/balaan/)
+
 ## 개발환경
 
 - node.js v16.15.0
