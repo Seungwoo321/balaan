@@ -60,7 +60,7 @@ export default {
                     /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
                 ],
                 password: [
-                    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
+                    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/
                 ]
             },
             errorMessage: {
@@ -134,7 +134,7 @@ export default {
         },
         password: {
             handler () {
-                this.errorMessage.password = this.isValidPassword ? '' : '유효한 패스워드 형식이 아닙니다. (영문 대소문자,숫자,특수문자를 포함한 8자리 이상)'
+                this.errorMessage.password = this.isValidPassword ? '' : '유효한 패스워드 형식이 아닙니다. (영문 대소문자,숫자,특수문자(!@#$%^&*)를 포함한 8자리 이상)'
             }
         },
         confirmPassword: {
