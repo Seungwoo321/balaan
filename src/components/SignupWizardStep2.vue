@@ -246,7 +246,7 @@ export default {
         },
         name: {
             handler () {
-                this.errorMessage.name = this.isValidName ? '' : '유효한 이름 형식이 아닙니다.'
+                this.errorMessage.name = this.isValidName ? '' : '유효한 이름 형식이 아닙니다. (2글자 이상의 한글 혹은 3글자 이상의 알파벳)'
             }
         },
         phoneNumber: {

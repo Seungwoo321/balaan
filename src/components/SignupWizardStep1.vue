@@ -154,7 +154,7 @@ export default {
         },
         password: {
             handler () {
-                this.errorMessage.password = this.isValidPassword ? '' : '유효한 패스워드 형식이 아닙니다.'
+                this.errorMessage.password = this.isValidPassword ? '' : '유효한 패스워드 형식이 아닙니다. (영문 대소문자,숫자,특수문자를 포함한 8자리 이상)'
             }
         },
         confirmPassword: {
