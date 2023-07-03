@@ -25,7 +25,7 @@
             class="d-flex mt-50 pl-50 pr-50 justify-content-flex-end"
         >
             <button
-                :disabled="isValidForm ? null : 'disabled'"
+                :disabled="!isValidForm"
                 type="button"
                 @click="handleClickNext"
             >
@@ -63,11 +63,6 @@ export default {
                     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
                 ]
             },
-            inputModel: {
-                email: '',
-                password: '',
-                confirmPassword: ''
-            },
             errorMessage: {
                 email: '',
                 password: '',
@@ -75,34 +70,38 @@ export default {
             }
         }
     },
-    created () {
-        this.email = this.userInfo.email
-        this.password = this.userInfo.password
-        this.confirmPassword = this.userInfo.confirmPassword
-    },
     computed: {
         email: {
             get () {
-                return this.inputModel.email
+                return this.userInfo.email
             },
             set (value) {
-                this.inputModel.email = value
+                this.$emit('update:userInfo', {
+                    ...this.userInfo,
+                    email: value
+                })
             }
         },
         password: {
             get () {
-                return this.inputModel.password
+                return this.userInfo.password
             },
             set (value) {
-                this.inputModel.password = value
+                this.$emit('update:userInfo', {
+                    ...this.userInfo,
+                    password: value
+                })
             }
         },
         confirmPassword: {
             get () {
-                return this.inputModel.confirmPassword
+                return this.userInfo.confirmPassword
             },
             set (value) {
-                this.inputModel.confirmPassword = value
+                this.$emit('update:userInfo', {
+                    ...this.userInfo,
+                    confirmPassword: value
+                })
             }
         },
         isValidEmail () {
@@ -115,38 +114,19 @@ export default {
             return this.password === this.confirmPassword
         },
         isValidForm () {
-            return this.isValidEmail && this.isValidPassword && this.isValidConfirmPassword
+            return (
+                this.isValidEmail &&
+                this.isValidPassword &&
+                this.isValidConfirmPassword
+            )
         }
     },
     methods: {
-        updateUserInfo () {
-            this.$emit('update:userInfo', {
-                email: this.email,
-                password: this.password,
-                confirmPassword: this.confirmPassword
-            })
-        },
-        resetUserInfo () {
-            this.$emit('update:userInfo', {
-                email: '',
-                password: '',
-                confirmPassword: ''
-            })
-        },
         handleClickNext () {
             this.$emit('next:page')
         }
     },
     watch: {
-        isValidForm: {
-            handler (value) {
-                if (value) {
-                    this.updateUserInfo()
-                } else {
-                    this.resetUserInfo()
-                }
-            }
-        },
         email: {
             handler () {
                 this.errorMessage.email = this.isValidEmail ? '' : '유효한 이메일 형식이 아닙니다.'

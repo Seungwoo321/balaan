@@ -17,7 +17,7 @@
         >
             <button
                 type="button"
-                :disabled="isValidForm ? null : 'disabled'"
+                :disabled="!isValidForm"
                 @click="handleClickNext"
             >
                 완료
@@ -52,55 +52,55 @@ export default {
                     /^\d{4}$/
                 ]
             },
-            inputModel: {
-                cardNumber1: '',
-                cardNumber2: '',
-                cardNumber3: '',
-                cardNumber4: ''
-            },
             errorMessage: {
                 cardNumber: ''
             },
             isValidForm: false
         }
     },
-    created () {
-        this.cardNumber1 = this.userInfo.cardNumber1
-        this.cardNumber2 = this.userInfo.cardNumber2
-        this.cardNumber3 = this.userInfo.cardNumber3
-        this.cardNumber4 = this.userInfo.cardNumber4
-    },
     computed: {
         cardNumber1: {
             get () {
-                return this.inputModel.cardNumber1
+                return this.userInfo.cardNumber1
             },
             set (value) {
-                this.inputModel.cardNumber1 = value
+                this.$emit('update:userInfo', {
+                    ...this.userInfo,
+                    cardNumber1: value
+                })
             }
         },
         cardNumber2: {
             get () {
-                return this.inputModel.cardNumber2
+                return this.userInfo.cardNumber2
             },
             set (value) {
-                this.inputModel.cardNumber2 = value
+                this.$emit('update:userInfo', {
+                    ...this.userInfo,
+                    cardNumber2: value
+                })
             }
         },
         cardNumber3: {
             get () {
-                return this.inputModel.cardNumber3
+                return this.userInfo.cardNumber3
             },
             set (value) {
-                this.inputModel.cardNumber3 = value
+                this.$emit('update:userInfo', {
+                    ...this.userInfo,
+                    cardNumber3: value
+                })
             }
         },
         cardNumber4: {
             get () {
-                return this.inputModel.cardNumber4
+                return this.userInfo.cardNumber4
             },
             set (value) {
-                this.inputModel.cardNumber4 = value
+                this.$emit('update:userInfo', {
+                    ...this.userInfo,
+                    cardNumber4: value
+                })
             }
         },
         creditCardFullNumber () {
@@ -116,22 +116,6 @@ export default {
         }
     },
     methods: {
-        updateUserInfo () {
-            this.$emit('update:userInfo', {
-                cardNumber1: this.cardNumber1,
-                cardNumber2: this.cardNumber2,
-                cardNumber3: this.cardNumber3,
-                cardNumber4: this.cardNumber4
-            })
-        },
-        resetUserInfo () {
-            this.$emit('update:userInfo', {
-                cardNumber1: '',
-                cardNumber2: '',
-                cardNumber3: '',
-                cardNumber4: ''
-            })
-        },
         handleClickNext () {
             this.$emit('next:page')
         },
@@ -152,15 +136,6 @@ export default {
         }
     },
     watch: {
-        isValidForm: {
-            handler (value) {
-                if (value) {
-                    this.updateUserInfo()
-                } else {
-                    this.resetUserInfo()
-                }
-            }
-        },
         creditCardFullNumber: {
             handler (value) {
                 if (this.validateCardNumber(value)) {
@@ -170,8 +145,7 @@ export default {
                     this.isValidForm = false
                     this.errorMessage.cardNumber = '유효한 카드번호 형식이 아닙니다.'
                 }
-            },
-            deep: true
+            }
         }
     }
 }

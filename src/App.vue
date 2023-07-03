@@ -108,10 +108,12 @@ export default {
             shippingInfo: {
                 name: '',
                 phoneNumber: '',
-                postcode: '',
-                address: '',
-                detailAddress: '',
-                extraAddress: ''
+                address: {
+                    postcode: '',
+                    base: '',
+                    extra: ''
+                },
+                detailAddress: ''
             },
             paymentInfo: {
                 cardNumber1: '',
@@ -123,7 +125,7 @@ export default {
     },
     computed: {
         fullAddress () {
-            return `(${this.shippingInfo.postcode}) ${this.shippingInfo.address} ${this.shippingInfo.detailAddress} ${this.shippingInfo.extraAddress}`
+            return `(${this.shippingInfo.address.postcode}) ${this.shippingInfo.address.base} ${this.shippingInfo.detailAddress} ${this.shippingInfo.address.extra}`
         }
     },
     methods: {

@@ -19,16 +19,16 @@
         <div class="pt-25 pb-25 pl-50 pr-50 d-flex justify-content-space-between">
             <label for="address">주소</label>
             <div>
-                <input v-model="postcode" class="mr-25" type="text" name="postcode" id="postcode" placeholder="우편번호" readonly>
+                <input v-model="address.postcode" class="mr-25" type="text" name="postcode" id="postcode" placeholder="우편번호" readonly>
                 <button type="button" @click="execDaumPostcode">우편번호 찾기</button>
             </div>
         </div>
         <div class="d-flex pb-25 pl-50 pr-50">
-            <input v-model="address" class="w-100" type="text" name="address" id="address" placeholder="주소" readonly>
+            <input v-model="address.base" class="w-100" type="text" name="address" id="address" placeholder="주소" readonly>
         </div>
         <div class="pb-25 pl-50 pr-50 d-flex justify-content-space-between">
             <input ref="detailAddressInput" v-model="detailAddress" class="w-100 mr-25" type="text" name="detailAddress" id="detailAddress" placeholder="상세주소">
-            <input v-model="extraAddress" class="w-100" type="text" name="extraAddress" id="extraAddress" placeholder="참고항목" readonly>
+            <input v-model="address.extraAddress" class="w-100" type="text" name="extraAddress" id="extraAddress" placeholder="참고항목" readonly>
         </div>
         <small class="pr-50 d-flex justify-content-flex-end text-danger">
             {{ errorMessage.address }}
@@ -44,7 +44,7 @@
             </button>
             <button
                 type="button"
-                :disabled="isValidForm ? null : 'disabled'"
+                :disabled="!isValidForm"
                 @click="handleClickNext"
             >
                 다음
@@ -66,9 +66,11 @@ export default {
                 return {
                     name: '',
                     phoneNumber: '',
-                    postcode: '',
-                    address: '',
-                    extraAddress: '',
+                    address: {
+                        postcode: '',
+                        base: '',
+                        extra: ''
+                    },
                     detailAddress: ''
                 }
             }
@@ -84,28 +86,12 @@ export default {
                     /^0\d{2}[ -]?\d{3,4}[ -]?\d{4}$/
                 ]
             },
-            inputModel: {
-                name: '',
-                phoneNumber: '',
-                postcode: '',
-                address: '',
-                detailAddress: '',
-                extraAddress: ''
-            },
             errorMessage: {
                 name: '',
                 phoneNumber: '',
                 address: ''
             }
         }
-    },
-    created () {
-        this.name = this.userInfo.name
-        this.phoneNumber = this.userInfo.phoneNumber
-        this.postcode = this.userInfo.postcode
-        this.address = this.userInfo.address
-        this.detailAddress = this.userInfo.detailAddress
-        this.extraAddress = this.userInfo.extraAddress
     },
     mounted () {
         this.$_loadDaumPostCode()
@@ -116,50 +102,46 @@ export default {
     computed: {
         name: {
             get () {
-                return this.inputModel.name
+                return this.userInfo.name
             },
             set (value) {
-                this.inputModel.name = value
+                this.$emit('update:userInfo', {
+                    ...this.userInfo,
+                    name: value
+                })
             }
         },
         phoneNumber: {
             get () {
-                return this.inputModel.phoneNumber
+                return this.userInfo.phoneNumber
             },
             set (value) {
-                this.inputModel.phoneNumber = value
-            }
-        },
-        postcode: {
-            get () {
-                return this.inputModel.postcode
-            },
-            set (value) {
-                this.inputModel.postcode = value
-            }
-        },
-        address: {
-            get () {
-                return this.inputModel.address
-            },
-            set (value) {
-                this.inputModel.address = value
+                this.$emit('update:userInfo', {
+                    ...this.userInfo,
+                    phoneNumber: value
+                })
             }
         },
         detailAddress: {
             get () {
-                return this.inputModel.detailAddress
+                return this.userInfo.detailAddress
             },
             set (value) {
-                this.inputModel.detailAddress = value
+                this.$emit('update:userInfo', {
+                    ...this.userInfo,
+                    detailAddress: value
+                })
             }
         },
-        extraAddress: {
+        address: {
             get () {
-                return this.inputModel.extraAddress
+                return this.userInfo.address
             },
             set (value) {
-                this.inputModel.extraAddress = value
+                this.$emit('update:userInfo', {
+                    ...this.userInfo,
+                    address: value
+                })
             }
         },
         isValidName () {
@@ -169,7 +151,7 @@ export default {
             return this.rules.phoneNumber.every(regex => regex.test(this.phoneNumber))
         },
         isValidAddress () {
-            return this.postcode && this.address
+            return this.address.postcode && this.address.base
         },
         isValidForm () {
             return !!(this.isValidName && this.isValidPhoneNumber && this.isValidAddress)
@@ -197,35 +179,17 @@ export default {
                         if (extraAddress !== '') {
                             extraAddress = ' (' + extraAddress + ')'
                         }
-                        this.extraAddress = extraAddress
                     } else {
-                        this.extraAddress = ''
+                        extraAddress = ''
                     }
-                    this.postcode = data.zonecode
-                    this.address = address
+                    this.address = {
+                        base: address,
+                        postcode: data.zonecode,
+                        extra: extraAddress
+                    }
                     this.$refs.detailAddressInput.focus()
                 }
             }).open()
-        },
-        updateUserInfo () {
-            this.$emit('update:userInfo', {
-                name: this.name,
-                phoneNumber: this.phoneNumber,
-                postcode: this.postcode,
-                address: this.address,
-                detailAddress: this.detailAddress,
-                extraAddress: this.extraAddress
-            })
-        },
-        resetUserInfo () {
-            this.$emit('update:userInfo', {
-                name: '',
-                phoneNumber: '',
-                postcode: '',
-                address: '',
-                detailAddress: '',
-                extraAddress: ''
-            })
         },
         handleClickBack () {
             this.$emit('back:page')
@@ -235,15 +199,6 @@ export default {
         }
     },
     watch: {
-        isValidForm: {
-            handler (value) {
-                if (value) {
-                    this.updateUserInfo()
-                } else {
-                    this.resetUserInfo()
-                }
-            }
-        },
         name: {
             handler () {
                 this.errorMessage.name = this.isValidName ? '' : '유효한 이름 형식이 아닙니다. (2글자 이상의 한글 혹은 3글자 이상의 알파벳)'
@@ -252,11 +207,6 @@ export default {
         phoneNumber: {
             handler () {
                 this.errorMessage.phoneNumber = this.isValidPhoneNumber ? '' : '유효한 연락처 형식이 아닙니다.'
-            }
-        },
-        detailAddress: {
-            handler () {
-                this.updateUserInfo()
             }
         }
     }
