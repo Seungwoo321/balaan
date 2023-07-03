@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h2>"{{ name }}"님의 회원가입을 축하합니다.</h2>
+        <h3>"{{ name }}"님의 회원가입을 축하합니다.</h3>
         <div>
             <p>이메일: {{ email }}</p>
             <p>주소: {{ fullAddress }}</p>
